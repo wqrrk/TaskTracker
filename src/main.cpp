@@ -5,14 +5,12 @@
 #include <sstream>
 #include <unordered_map>
 
-
 using namespace std;
 
-vector<string> parseArgument(string input) { 
+vector<string> parseArguments(string input, vector<string>& resultingArguments) { 
     if (input.empty()) return {};
 
     vector<string> arguments;
-    vector<string> resultingArguments;
     istringstream inputStream(input);
     string command;
 
@@ -59,29 +57,45 @@ vector<string> parseArgument(string input) {
 }
 
 int main() { 
-
-    TaskManager manager ; 
-
-    string userInput; 
-    
+    TaskManager manager; 
+    string userInput;
     vector<string> args;
-    string arg;
 
-    getline(cin, userInput); 
 
-    for (int i = 0; i < args.size(); i++) { 
-        cout << args[i] << endl; 
+    // TODO implement console menu and handle argument checking for each case
+    while (true) { 
+        getline(cin, userInput);
+        parseArguments(userInput, args);
+        if (args[0] == "add") { 
+            if (args.size() > 3) { 
+                cerr << "Incorrect command" << endl;
+                break;
+            }
+            manager.createTask(args[1]);
+        } else if (args[0] == "delete") { 
+            if (args.size() > 2) { 
+                cerr << "Incorrect command" << endl;
+                break;
+            }
+            manager.deleteTask(stoi(args[1]));
+        } else if (args[0] == "update") { 
+            if (args.size() > 3) { 
+                cerr << "Incorrect command" << endl;
+            }
+        }
     }
 
-    if (args.size() > 3 || args.size() == 0) { 
-        cout << "Error: Invalid Arguments" << endl;
-        return EXIT_FAILURE;
-    }
+
+
+
+
+
 
     if (args[0] == "add") { 
+        
         manager.createTask(args[1]);
     } else if (args[0] == "update") { 
-        //call update func
+        
     } else if (args[0] == "delete") { 
         //call delete func 
     } else if (args[0] == "mark-in-progress") { 
