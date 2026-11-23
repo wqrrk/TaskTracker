@@ -1,20 +1,16 @@
+#include "TaskManager.h"
+
 #include <iostream> 
 #include <vector>
 #include <sstream>
 #include <unordered_map>
 
-#include "TaskManager.h"
 
 using namespace std;
 
-//add
-//"buy
-//groceries"
-
-
 vector<string> parseArgument(string input) { 
+    if (input.empty()) return {};
 
-    const string whitespace = " \t\n\r\f\v";
     vector<string> arguments;
     vector<string> resultingArguments;
     istringstream inputStream(input);
@@ -24,26 +20,42 @@ vector<string> parseArgument(string input) {
         arguments.push_back(command);
     }
 
-    int id;
+    string id;
     string desc; 
+    string listMode;
 
+    resultingArguments.push_back(arguments[0]);
     if (arguments[0] == "add") { 
         for (int i = 1; i < arguments.size(); i++) { 
-            desc = " "  + arguments[i];
+            desc += " "  + arguments[i];
         }
         //trim the leading whitespace
-        desc = desc.substr(1,desc.size() - 2);
-        //push the add command and the argument
-        resultingArguments.push_back(arguments[0]);
+        desc.erase(0, 1);
+        //push the description
         resultingArguments.push_back(desc);
-
     } else if (arguments[0] == "update") { 
-        
+        id = arguments[1];
+        for (int i = 2; i < arguments.size(); i++) { 
+            desc = " "  + arguments[i];
+        }
+        //delete the leading whitespace
+        desc.erase(0, 1);
+        resultingArguments.push_back(id);
+        resultingArguments.push_back(desc);
+    } else if (arguments[0] == "delete") { 
+        id = arguments[1]; 
+        resultingArguments.push_back(id); 
+    } else if (arguments[0] == "mark-in-progress") { 
+        id = arguments[1]; 
+        resultingArguments.push_back(id);
+    } else if (arguments[0] == "mark-done") { 
+        id = arguments[1]; 
+        resultingArguments.push_back(id);
+    } else if (arguments[0] == "list") { 
+        listMode = arguments[1];
+        resultingArguments.push_back(listMode);
     }
-
-    
-    
-
+    return resultingArguments;
 }
 
 int main() { 
